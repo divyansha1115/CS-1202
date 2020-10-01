@@ -1,0 +1,59 @@
+#define dbg(...) ; 
+#define db(...) ; 
+#include "bits/stdc++.h"
+#define fast ios_base::sync_with_stdio(0);cin.tie(NULL);cout.tie(NULL)
+#define f(i,a,b) for(i=a;i<b;i++)
+#define fr(i,a,b) for(i=a;i>=b;i--)
+#define endl '\n'
+#define ll long long int
+#define ff first
+#define ss second
+#define pb push_back
+#define pf push_front
+#define mod 1000000007
+using namespace std;
+ 
+int root[1005],q[1005],isChild[1005],ans;
+vector<pair<int, pair<int,int>>> v;
+ 
+int find_root(int x)
+{
+    if(x==root[x])
+        return x;
+    return root[x]=find_root(root[x]);
+}
+ 
+void union_root(int x, int y, int c)
+{
+    int rx=find_root(x);
+    int ry=find_root(y);
+    if(rx!=ry)
+    {
+        if(q[x]>q[y] and !isChild[y])
+            root[ry]=rx, isChild[y]=1,ans+=c;
+        else if(q[y]>q[x] and !isChild[x])
+            root[rx]=ry, isChild[x]=1,ans+=c;
+    }
+}
+ 
+int main()  
+{
+    fast;
+    int n,m,i,a,b,c,cnt=0,r;
+    cin>>n;
+    f(i,1,n+1)
+        cin>>q[i], root[i]=i;
+    cin>>m;
+    f(i,0,m)
+        cin>>a>>b>>c, v.pb({c,{a,b}});
+    sort(v.begin(), v.end());
+ 
+    for(auto el:v)
+        union_root(el.ss.ff, el.ss.ss, el.ff);
+    
+    r=find_root(1);
+    f(i,2,n+1)
+        if(find_root(i)!=r)
+            ans=-1;
+    cout<<ans;
+}
