@@ -1,0 +1,41 @@
+#define dbg(...) ; 
+#define db(...) ; 
+#include "bits/stdc++.h"
+#define fast ios_base::sync_with_stdio(0);cin.tie(NULL);cout.tie(NULL)
+#define f(i,a,b) for(i=a;i<b;i++)
+#define fr(i,a,b) for(i=a;i>=b;i--)
+#define endl '\n'
+#define ll long long int
+#define ff first
+#define ss second
+#define pb push_back
+#define pf push_front
+#define mod 1000000007
+using namespace std;
+ 
+int main()  
+{
+    fast;
+    int n,m,i,a,b,c,ans=0,cnt=0;
+    cin>>n;
+    int q[n];
+    set<int> st[n+1];
+    f(i,0,n)
+        cin>>q[i];
+    cin>>m;
+    f(i,0,m)
+        cin>>a>>b>>c, st[b].insert(c);
+    f(i,1,n+1)
+    {
+        if(st[i].empty())
+            cnt++;
+        for(auto el: st[i])
+        {
+            ans+=el;
+            break;
+        }
+    }
+    if(cnt>1)
+        ans=-1;
+    cout<<ans;
+}
