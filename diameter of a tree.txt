@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+#define fast ios_base::sync_with_stdio(0);cin.tie(NULL);cout.tie(NULL)
+#define f(i,a,b) for(i=a;i<b;i++)
+#define fr(i,a,b) for(i=a;i>=b;i--)
+#define endl '\n'
+#define ll long long int
+#define ff first
+#define ss second
+#define pb push_back
+#define mod 1000000007
+using namespace std;
+
+vector<int> v[200005],ans,cur,fin;
+int visit[100005],node,mx=0;
+
+void dfs(int x,int c)
+{
+	c++;
+	visit[x]++;
+	for(auto y:v[x])
+		if(!visit[y])
+		{
+			dfs(y,c);
+			if(mx<c)
+				mx=c,node=y;
+		}
+}
+
+void path(int x,int y)
+{
+	visit[x]++;
+	if(x==y)
+	{
+		fin=cur;
+		return;
+	}
+	for(auto l:v[x])
+		if(!visit[l])
+		{
+			cur.pb(l);
+			path(l,y);
+			cur.pop_back();
+		}
+}
+
+int main()
+{
+	fast;
+	int n,i,x,y;
+	cin>>n;
+	f(i,0,n)
+		cin>>x>>y,v[x].pb(y),v[y].pb(x);
+	dfs(1,0);
+	cout<<mx<<' '<<node<<endl;
+	memset(visit,0,sizeof(visit));
+	mx=0;
+	dfs(node,0);
+	cout<<mx<<' '<<node;
+	memset(visit,0,sizeof(visit)); mx=0;
+	
+	cur.pb(ans[0]);
+	path(ans[0],ans[1]);
+}
