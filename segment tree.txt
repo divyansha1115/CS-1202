@@ -1,0 +1,83 @@
+range sum
+O(4*N) space complexity
+{Segment tree with 2^x (n) leaf nodes will have 2^(x+1) — 1 (2n-1) total nodes because it is a perfect binary tree.
+
+Now, you will have useless leaf nodes if you are using general n. Therefore at worst you will have almost 2*n leaf nodes because you must round up to the next power of two. If n is 2^j + 1, then you must have 2^(j+1) leaf nodes = O(2*n).
+total nodes is : 2 * leaf nodes so we have 2*2*n = O(4n) }
+
+build-O(N), update and query-O(logN)
+To query on a given range, check 3 conditions.
+Range represented by a node is completely inside the given range
+Range represented by a node is completely outside the given range
+Range represented by a node is partially inside and partially outside the given range
+
+
+
+#include<bits/stdc++.h>
+#define fast ios_base::sync_with_stdio(0);cin.tie(NULL);cout.tie(NULL)
+#define f(i,a,b) for(i=a;i<b;i++)
+#define fr(i,a,b) for(i=a;i>=b;i--)
+#define endl '\n'
+#define ll long long int
+#define ff first
+#define ss second
+#define pb push_back
+using namespace std;
+
+int ar[1000],seg[1000];
+
+int query(int l, int r, int pos, int x, int y)
+{
+	if(l>y or r<x)
+		return 0;
+	if(l>=x and r<=y)
+		return seg[pos];
+	
+	int mid=(r+l)/2;
+	return query(l,mid,2*pos+1,x,y)+query(mid+1,r,2*pos+2,x,y);
+}
+
+void update(int l, int r, int pos, int val, int idx)
+{
+	if(l==r)
+		ar[idx]=seg[pos]=val;
+	else
+	{
+		int mid=(r+l)/2;
+		if(idx>=l && idx<=mid)
+			update(l,mid,2*pos+1,val,idx);
+		else
+			update(mid+1,r,2*pos+2,val,idx);
+		seg[pos]=seg[2*pos+1]+seg[2*pos+2];
+	}
+}
+
+void build(int l, int r, int pos)
+{
+	if(l==r)
+		seg[pos]=ar[l];
+	else
+	{
+		int mid=(l+r)/2;
+		build(l,mid,2*pos+1);
+		build(mid+1,r,2*pos+2);
+		seg[pos]=seg[2*pos+1]+seg[2*pos+2];
+	}
+}
+
+int main()
+{	
+	int n,q,i,x,y;
+	char ch;
+	cin>>n>>q;	
+	f(i,0,n)
+		cin>>ar[i];
+	build(0,n-1,0);
+	while(q--)
+	{
+		cin>>ch>>x>>y;
+		if(ch=='q')
+			cout<<query(0,n-1,0,x,y)<<endl;
+		else update(0,n-1,0,y,x);
+	}
+}
