@@ -1,0 +1,25 @@
+#include "bits/stdc++.h"
+#define fast ios_base::sync_with_stdio(0);cin.tie(NULL);cout.tie(NULL)
+#define endl '\n'
+using namespace std;
+ 
+int main()
+{
+    int t,n,m,i,j,ans,temp;
+    cin>>t;
+    while(t--)
+    {
+        cin>>n>>m;
+        m++;
+        ans=(n^m);
+        for(i=30;i>=0;i--)
+            if(n&(1<<i) and !(m&(1<<i)))
+                break;
+        temp=0;
+        for(j=30;j>i;j--)
+            temp = temp|(1<<j);
+ 
+        ans=ans&temp;
+        cout<<ans<<endl;
+    }
+}
