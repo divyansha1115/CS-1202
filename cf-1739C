@@ -1,0 +1,54 @@
+#include "bits/stdc++.h"
+#define fast ios_base::sync_with_stdio(0);cin.tie(NULL);cout.tie(NULL)
+#define endl '\n'
+using namespace std;
+ 
+long long int mod=998244353, fact[61];
+ 
+long long int f(int x)
+{
+    if(x<0)
+        return 0;
+    return fact[x];
+}
+ 
+long long int mod_inv(long long int x, int y)
+{
+    if(x<=1)
+        return 1;
+    long long int ans = 1;
+    while(y)
+    {
+        if(y&1)
+            ans = ans*x%mod;
+        x = x*x%mod;
+        y = y>>1;
+    }
+    return ans;
+}
+ 
+int main()
+{
+    int t,n;
+    long long int a[61],b[61],d=1,tot;
+    cin>>t;
+ 
+    fact[1]=1;
+    for(int i=2; i<=60;i++)
+        fact[i]=fact[i-1]*i%mod;
+    
+    a[2]=1; b[2]=0;
+    for(int i=4; i<=60;i+=2)
+    {
+        tot = ((f(i) * mod_inv(f(i/2),mod-2))%mod *  mod_inv(f(i/2),mod-2))%mod;
+        a[i] = tot * mod_inv(2,mod-2)%mod;
+        a[i] = (a[i] + b[i-2])%mod;
+        b[i] = (tot - a[i] - 1 + mod)%mod;
+    }
+ 
+    while(t--)
+    {
+        cin>>n;
+        cout<<a[n]<<' '<<b[n]<<' '<<d<<endl;
+    }
+}
